@@ -1,13 +1,24 @@
 import React from "react";
 
 const Square = ({id}) => {
-  return <button>{id}</button>
+
+  const palet = ['red','blue','green']
+
+  const getRandomColor = () => {
+   return palet[Math.floor(Math.random()*3)];
+  }
+  return (
+  <button onClick={(e) => {e.target.style.background = getRandomColor()}}>
+    <h1>{id}</h1>
+    </button>
+)
 }
 const Board = () => {
   const [player, setPlayer] = React.useState(1);
   let status = `Player ${player}`;
 
   const renderSquare = (i) => {
+
     return <Square id={i}></Square>
   }
   return (
