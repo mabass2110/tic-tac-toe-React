@@ -1,18 +1,25 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 
-const Square = ({id,player}) => {
+const Square = ({id,player, newState}) => {
   const [color,setColor] = useState("red")
   const palet = ['red','blue','green']
 
   const getRandomColor = () => {
    return palet[Math.floor(Math.random() * 3)];
   }
+
+  useEffect(()=>{
+    console.log(`Render ${id}`)
+    return ()=> console.log(`unmounting Square ${id}`)
+  })
+
+
   return (
   <button onClick={(e) => {
-
-    setColor(getRandomColor)
-
-    e.target.style.background = color;
+    let col = getRandomColor()
+    setColor(col)
+    newState({id:id, color:col})
+    e.target.style.background = col;
       alert(`I am Square ${id}`)
   
     }}>
@@ -25,7 +32,14 @@ const Board = () => {
   const [player, setPlayer] = useState("Player");
   const [mounted,setMounted] = useState(true)
   const [random, setRandom] = useState(0)
+  const [state,setState] = useState([])
+
   let status = ` ${player}`;
+
+  const newState = (object)=>{
+    setState([...state, object])
+    console.log(`adding state ${JSON.stringify(object)}`)
+  }
 
   const reRender = ()=> setRandom(Math.random())
 
@@ -33,7 +47,7 @@ const Board = () => {
 
   const renderSquare = (i) => {
 
-    return <Square id={i} player={player}></Square>
+    return <Square id={i} newState={newState} player={player}></Square>
   }
   return (
     <div className="game-board">
